@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
     try {
       jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
       return NextResponse.redirect(new URL('/dashboard', request.url));
-    } catch (_err: unknown) {
+    } catch {
       const response = NextResponse.next();
       response.cookies.delete("auth_token");
       return response;
