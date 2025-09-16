@@ -8,6 +8,7 @@ interface ButtonProps {
   endIcon?: ReactNode; // Icon after the text
   onClick?: () => void; // Click handler
   disabled?: boolean; // Disabled state
+  type: "button" | "submit" | "reset"; // Button type
   className?: string; // Disabled state
 }
 

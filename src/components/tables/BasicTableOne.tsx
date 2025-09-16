@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -25,7 +25,6 @@ interface Order {
   budget: string;
 }
 
-// Define the table data using the interface
 const tableData: Order[] = [
   {
     id: 1,
@@ -112,7 +111,8 @@ const tableData: Order[] = [
 ];
 
 export default function BasicTableOne() {
-  return (
+
+   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1102px]">
