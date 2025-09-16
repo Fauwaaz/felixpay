@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     
     // Check if user already exists
     const checkSql = "SELECT id FROM users WHERE email = ?";
-    const [existingUsers]: any = await db.query(checkSql, [email]);
+    const [existingUsers] = await db.query(checkSql, [email]);
     
     if (existingUsers.length > 0) {
       await db.end();
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       INSERT INTO users (name, email, password, created_at) 
       VALUES (?, ?, ?, NOW())
     `;
-    const [result]: any = await db.query(insertSql, [name, email, hashedPassword]);
+    const [result] = await db.query(insertSql, [name, email, hashedPassword]);
 
     // Generate JWT token
     const token = jwt.sign(

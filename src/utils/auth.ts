@@ -10,8 +10,8 @@ export function verifyToken(token: string): AuthUser | null {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as AuthUser;
     return decoded;
-  } catch (error) {
-    return null;
+  } catch (err) {
+    return {err: 'Invalid token'} as any;
   }
 }
 

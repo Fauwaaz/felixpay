@@ -15,13 +15,21 @@ export async function GET(request: NextRequest) {
     }
 
     // Verify JWT token
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
     
     const db = await createConnection('');
     
     // Get current user data
     const sql = "SELECT id, name, email, created_at FROM users WHERE id = ?";
-    const [users]: any = await db.query(sql, [decoded.userId]);
+    const userId = typeof decoded === "object" && decoded !== null && "userId" in decoded ? (decoded as any).userId : undefined;
+    if (!userId) {
+      await db.end();
+      return NextResponse.json(
+        { error: "Invalid token payload" },
+        { status: 401 }
+      );
+    }
+    const [users] = await db.query(sql, [userId]);
     
     await db.end();
 

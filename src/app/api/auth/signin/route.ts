@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     
     // Check if user exists
     const sql = "SELECT * FROM users WHERE email = ?";
-    const [users]: any = await db.query(sql, [email]);
+    const [users] = await db.query(sql, [email]);
     
     if (users.length === 0) {
       return NextResponse.json(

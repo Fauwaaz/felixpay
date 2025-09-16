@@ -75,7 +75,7 @@ export default function SignUpForm() {
       } else {
         setFieldError('general', result.error || 'Sign up failed');
       }
-    } catch (error) {
+    } catch (errors) {
       setFieldError('general', 'An unexpected error occurred');
     } finally {
       setLoading(false);

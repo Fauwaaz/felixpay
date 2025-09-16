@@ -30,11 +30,13 @@ export async function middleware(request: NextRequest) {
     try {
       jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
       return NextResponse.redirect(new URL('/dashboard', request.url));
-    } catch (error) {
-      // Invalid token, let them proceed to auth routes
+    } catch (err) {
       const response = NextResponse.next();
       response.cookies.delete('auth_token');
-      return response;
+      return {err: 'Invalid token'} as any;
+      // const response = NextResponse.next();
+      // response.cookies.delete('auth_token');
+      // return response;
     }
   }
 
