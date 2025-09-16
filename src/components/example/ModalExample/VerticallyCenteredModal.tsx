@@ -14,7 +14,7 @@ export default function VerticallyCenteredModal() {
   };
   return (
     <ComponentCard title="Vertically Centered Modal">
-      <Button size="sm" onClick={openModal}>
+      <Button type='button' size="sm" onClick={openModal}>
         Open Modal
       </Button>
       <Modal
@@ -33,10 +33,10 @@ export default function VerticallyCenteredModal() {
           </p>
 
           <div className="flex items-center justify-center w-full gap-3 mt-8">
-            <Button size="sm" variant="outline" onClick={closeModal}>
+            <Button type='button' size="sm" variant="outline" onClick={closeModal}>
               Close
             </Button>
-            <Button size="sm" onClick={handleSave}>
+            <Button type='button' size="sm" onClick={handleSave}>
               Save Changes
             </Button>
           </div>

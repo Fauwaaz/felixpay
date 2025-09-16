@@ -16,7 +16,7 @@ export default function FormInModal() {
   };
   return (
     <ComponentCard title="Form In Modal">
-      <Button size="sm" onClick={openModal}>
+      <Button type='button' size="sm" onClick={openModal}>
         Open Modal
       </Button>
       <Modal
@@ -57,10 +57,10 @@ export default function FormInModal() {
           </div>
 
           <div className="flex items-center justify-end w-full gap-3 mt-6">
-            <Button size="sm" variant="outline" onClick={closeModal}>
+            <Button type='button' size="sm" variant="outline" onClick={closeModal}>
               Close
             </Button>
-            <Button size="sm" onClick={handleSave}>
+            <Button type='button' size="sm" onClick={handleSave}>
               Save Changes
             </Button>
           </div>

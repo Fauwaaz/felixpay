@@ -18,7 +18,7 @@ export default function FullScreenModal() {
   };
   return (
     <ComponentCard title="Full Screen Modal">
-      <Button size="sm" onClick={openFullscreenModal}>
+      <Button type='button' size="sm" onClick={openFullscreenModal}>
         Open Modal
       </Button>
       <Modal
@@ -52,10 +52,10 @@ export default function FullScreenModal() {
             </p>
           </div>
           <div className="flex items-center justify-end w-full gap-3 mt-8">
-            <Button size="sm" variant="outline" onClick={closeFullscreenModal}>
+            <Button type='button' size="sm" variant="outline" onClick={closeFullscreenModal}>
               Close
             </Button>
-            <Button size="sm" onClick={handleSave}>
+            <Button type='button' size="sm" onClick={handleSave}>
               Save Changes
             </Button>
           </div>
