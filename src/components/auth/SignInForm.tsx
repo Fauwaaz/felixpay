@@ -77,7 +77,7 @@ export default function SignInForm() {
         setFieldError('general', result.error || 'Sign in failed');
       }
     } catch (errors) {
-      setFieldError('general', 'An unexpected error occurred');
+      setFieldError(errors as any, 'An unexpected error occurred');
     } finally {
       setLoading(false);
     }

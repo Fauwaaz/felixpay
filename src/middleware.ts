@@ -11,12 +11,12 @@ export async function middleware(request: NextRequest) {
   const authRoutes = ['/signin', '/signup'];
 
   // Check if current path is protected
-  const isProtectedRoute = protectedRoutes.some(route => 
+  const isProtectedRoute = protectedRoutes.some(route =>
     pathname.startsWith(route)
   );
-  
+
   // Check if current path is auth route
-  const isAuthRoute = authRoutes.some(route => 
+  const isAuthRoute = authRoutes.some(route =>
     pathname.startsWith(route)
   );
 
@@ -30,13 +30,10 @@ export async function middleware(request: NextRequest) {
     try {
       jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
       return NextResponse.redirect(new URL('/dashboard', request.url));
-    } catch (err) {
+    } catch (_err: unknown) {
       const response = NextResponse.next();
-      response.cookies.delete('auth_token');
-      return {err: 'Invalid token'} as any;
-      // const response = NextResponse.next();
-      // response.cookies.delete('auth_token');
-      // return response;
+      response.cookies.delete("auth_token");
+      return response;
     }
   }
 

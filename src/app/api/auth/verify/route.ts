@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     
     // Get current user data
     const sql = "SELECT id, name, email, created_at FROM users WHERE id = ?";
-    const userId = typeof decoded === "object" && decoded !== null && "userId" in decoded ? (decoded as any).userId : undefined;
+    const userId = typeof decoded === "object" && decoded !== null && "userId" in decoded ? (decoded as { userId: number }).userId : undefined;
     if (!userId) {
       await db.end();
       return NextResponse.json(
