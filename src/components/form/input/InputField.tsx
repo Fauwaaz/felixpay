@@ -65,6 +65,7 @@ const Input: FC<InputProps> = ({
         step={step}
         disabled={disabled}
         className={inputClasses}
+        autoComplete="off"
       />
 
       {/* Optional Hint Text */}

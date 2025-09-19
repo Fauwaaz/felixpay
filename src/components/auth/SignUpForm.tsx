@@ -71,7 +71,7 @@ export default function SignUpForm() {
       const result = await signup(formData.name, formData.email, formData.password);
 
       if (result.success) {
-        router.push('/dashboard'); // Redirect to dashboard or desired page
+        router.push('/'); // Redirect to dashboard or desired page
       } else {
         setFieldError('general', result.error || 'Sign up failed');
       }
@@ -138,7 +138,7 @@ export default function SignUpForm() {
               </Label>
               <Input
                 name="email"
-                placeholder="info@gmail.com"
+                placeholder="example@domain.com"
                 type="email"
                 value={formData.email}
                 onChange={handleInputChange}
@@ -205,7 +205,7 @@ export default function SignUpForm() {
             Already have an account?{" "}
             <Link
               href="/signin"
-              className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
+              className="text-brand-500 hover:text-brand-600 dark:text-brand-400 hover:underline"
             >
               Sign In
             </Link>

@@ -29,7 +29,7 @@ export async function middleware(request: NextRequest) {
   if (isAuthRoute && token) {
     try {
       jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
-      return NextResponse.redirect(new URL('/dashboard', request.url));
+      return NextResponse.redirect(new URL('/', request.url));
     } catch {
       const response = NextResponse.next();
       response.cookies.delete("auth_token");

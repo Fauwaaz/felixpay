@@ -19,7 +19,9 @@ export default function RootLayout({
       <body className={`${outfit.className} dark:bg-gray-900`}>
         <ThemeProvider>
           <AuthProvider>
-            <SidebarProvider>{children}</SidebarProvider>
+            <SidebarProvider>
+              {children} 
+            </SidebarProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

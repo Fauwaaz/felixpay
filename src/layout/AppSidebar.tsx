@@ -5,10 +5,12 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
+  CalenderIcon,
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
 } from "../icons/index";
+import { ArrowLeftRight, CheckCheck, File } from "lucide-react";
 
 type NavItem = {
   name: string;
@@ -22,6 +24,21 @@ const navItems: NavItem[] = [
     icon: <GridIcon />,
     name: "Dashboard",
     path: "/",
+  },
+  {
+    icon: <ArrowLeftRight />,
+    name: "Transactions",
+    path: "/transactions",
+  },
+  {
+    icon: <CheckCheck  />,
+    name: "Settlements",
+    path: "/settlements",
+  },
+  {
+    icon: <File  />,
+    name: "Reports",
+    path: "/reports",
   },
   // {
   //   icon: <CalenderIcon />,
