@@ -132,7 +132,6 @@ export default function TransactionsTable() {
         </button>
       </div>
 
-      {/* 📊 Table */}
       <div className="max-w-full overflow-x-auto">
         <div className="min-w-[1100px]">
           <Table>

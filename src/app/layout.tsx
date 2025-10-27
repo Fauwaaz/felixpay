@@ -1,5 +1,5 @@
 import { Outfit } from 'next/font/google';
-// @ts-ignore: side-effect import of global CSS (handled by Next.js)
+// @ts-expect-error: side-effect import of global CSS (handled by Next.js)
 import './globals.css';
 
 import { SidebarProvider } from '@/context/SidebarContext';

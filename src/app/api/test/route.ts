@@ -19,14 +19,19 @@ export async function GET() {
       message: 'Database connection successful!',
     }, { status: 200 });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Database connection error:', error);
+    
+    const errMessage = error instanceof Error ? error.message : String(error);
+    const errAny = error as any;
+    const errCode = typeof errAny?.code !== 'undefined' ? errAny.code : null;
+    const errErrno = typeof errAny?.errno !== 'undefined' ? errAny.errno : null;
     
     return NextResponse.json({ 
       success: false, 
-      error: error.message,
-      error_code: error.code,
-      error_errno: error.errno,
+      error: errMessage,
+      error_code: errCode,
+      error_errno: errErrno,
       message: 'Failed to connect to database'
     }, { status: 500 });
   }
