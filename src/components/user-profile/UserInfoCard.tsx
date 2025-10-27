@@ -5,14 +5,18 @@ import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
+import { useUser } from "@/hooks/useUser";
 
 export default function UserInfoCard() {
   const { isOpen, openModal, closeModal } = useModal();
+  const {user, loading} = useUser();
+
   const handleSave = () => {
-    // Handle save logic here
     console.log("Saving changes...");
     closeModal();
   };
+
+  if(loading) return null
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -26,8 +30,8 @@ export default function UserInfoCard() {
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                 First Name
               </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Musharof
+              <p className="text-sm font-medium text-gray-800 dark:text-white/90 capitalize">
+                {user.name || "Guest"}
               </p>
             </div>
 
@@ -36,7 +40,7 @@ export default function UserInfoCard() {
                 Last Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Chowdhury
+                {user.lastname || ""}
               </p>
             </div>
 
@@ -45,7 +49,7 @@ export default function UserInfoCard() {
                 Email address
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                randomuser@pimjo.com
+                {user.email || ""}
               </p>
             </div>
 

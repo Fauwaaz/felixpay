@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertical Semicircle Slider</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .slider-section {
+            position: relative;
+            width: 400px;
+            height: 700px;
+            overflow: hidden;
+        }
+
+        /* Semicircle Path */
+        .semicircle-path {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 600px;
+            pointer-events: none;
+        }
+
+        .path-line {
+            stroke: rgba(255, 255, 255, 0.4);
+            stroke-width: 4;
+            fill: none;
+        }
+
+        /* Slides Container */
+        .slides-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .path-line-desktop {
+            display: block;
+        }
+
+        .path-line-mobile {
+            display: none;
+        }
+
+        .slide {
+            position: absolute;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .slide-image-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            transition: all 0.8s ease;
+        }
+
+        .slide.active .slide-image-wrapper {
+            width: 200px;
+            height: 200px;
+        }
+
+        .image-border {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            padding: 6px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.8s ease;
+        }
+
+        .slide.active .image-border {
+            padding: 8px;
+        }
+
+        .progress-ring {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            width: calc(100% + 10px);
+            height: calc(100% + 10px);
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-circle {
+            stroke: #fff;
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 628;
+            stroke-dashoffset: 628;
+            transition: stroke-dashoffset 0.1s linear;
+        }
+
+        .slide.active .progress-ring-circle {
+            animation: progress 3s linear forwards;
+        }
+
+        @keyframes progress {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .slide-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #fff;
+        }
+
+        .slide {
+            opacity: 0.4;
+            transform: scale(0.8);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        .content-section {
+            flex: 1;
+            color: #fff;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.6s ease;
+        }
+
+        .content-section.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .content-section h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .content-section p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+        }
+
+        .content-section .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #fff;
+            color: #1e3c72;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-section .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .navigation-buttons {
+            position: absolute;
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .nav-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 968px) {
+            .slider-container {
+                overflow: hidden;
+            }
+
+            .slider-wrapper {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .slider-section {
+                width: 100%;
+                max-width: 100vw;
+                height: 300px;
+                order: 2;
+                overflow: hidden;
+            }
+
+            .semicircle-path {
+                width: 90%;
+                max-width: 600px;
+                height: 200px;
+                transform: translate(-50%, -50%);
+            }
+
+            .path-line-mobile {
+                display: block;
+            }
+
+            .path-line-desktop {
+                display: none;
+            }
+
+            .slide-image-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+
+            .slide.active .slide-image-wrapper {
+                width: 140px;
+                height: 140px;
+            }
+
+            .content-section {
+                order: 1;
+                text-align: center;
+                transform: translateY(20px);
+            }
+
+            .content-section.active {
+                transform: translateY(0);
+            }
+
+            .content-section h2 {
+                font-size: 2.5rem;
+            }
+
+            .content-section p {
+                font-size: 1rem;
+            }
+
+            .navigation-buttons {
+                position: static;
+                flex-direction: row;
+                transform: none;
+                order: 3;
+                justify-content: center;
+                margin-top: 30px;
+                gap: 20px;
+            }
+
+            .nav-btn {
+                width: 45px;
+                height: 45px;
+            }
+
+            .nav-btn:first-child svg {
+                transform: rotate(-90deg);
+            }
+
+            .nav-btn:last-child svg {
+                transform: rotate(-90deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .slider-container {
+                padding: 20px 10px;
+                overflow: hidden;
+            }
+
+            .slider-wrapper {
+                gap: 20px;
+            }
+
+            .slider-section {
+                height: 200px;
+                overflow: hidden;
+            }
+
+            .semicircle-path {
+                height: 180px;
+            }
+
+            .content-section h2 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+
+            .content-section p {
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+
+            .content-section .cta-button {
+                padding: 12px 30px;
+                font-size: 0.9rem;
+            }
+
+            .slide-image-wrapper {
+                width: 70px;
+                height: 70px;
+            }
+
+            .slide.active .slide-image-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+
+            .navigation-buttons {
+                margin-top: 20px;
+                gap: 15px;
+            }
+
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .nav-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-container">
+        <div class="slider-wrapper">
+            <div class="slider-section">
+                <!-- Semicircle Path -->
+                <svg class="semicircle-path" viewBox="0 0 300 600">
+                    <path class="path-line path-line-desktop" d="M 150 550 Q 50 300 150 50" />
+                    <path class="path-line path-line-mobile" d="M 50 125 Q 300 75 550 125" />
+                </svg>
+
+                <!-- Slides -->
+                <div class="slides-container" id="slidesContainer">
+                    <!-- Slides will be positioned dynamically -->
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button class="nav-btn nav-prev" id="prevBtn">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                        </svg>
+                    </button>
+                    <button class="nav-btn nav-next" id="nextBtn">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="content-section" id="contentSection">
+                <h2 id="contentTitle">Innovation First</h2>
+                <p id="contentDesc">Leading the way in cutting-edge technology solutions that transform businesses and drive growth.</p>
+                <a href="#" class="cta-button" id="contentCta">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const slides = [
+            {
+                title: "Innovation First",
+                desc: "Leading the way in cutting-edge technology solutions that transform businesses and drive growth.",
+                cta: "Learn More",
+                img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500"
+            },
+            {
+                title: "Creative Solutions",
+                desc: "Crafting unique experiences that resonate with your audience and elevate your brand presence.",
+                cta: "Explore",
+                img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500"
+            },
+            {
+                title: "Digital Excellence",
+                desc: "Delivering premium digital experiences that exceed expectations and create lasting impact.",
+                cta: "Discover",
+                img: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=500"
+            },
+            {
+                title: "Future Ready",
+                desc: "Building tomorrow's solutions today with forward-thinking strategies and innovative approaches.",
+                cta: "Get Started",
+                img: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=500"
+            },
+            {
+                title: "Global Impact",
+                desc: "Making a difference worldwide through sustainable practices and meaningful innovations.",
+                cta: "Join Us",
+                img: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=500"
+            }
+        ];
+
+        let currentIndex = 0;
+        let autoplayInterval;
+        const slidesContainer = document.getElementById('slidesContainer');
+        const contentSection = document.getElementById('contentSection');
+        const contentTitle = document.getElementById('contentTitle');
+        const contentDesc = document.getElementById('contentDesc');
+        const contentCta = document.getElementById('contentCta');
+
+        // Calculate positions along semicircle path
+        function calculatePosition(index, total) {
+            const isMobile = window.innerWidth <= 968;
+            
+            if (isMobile) {
+                // Horizontal path for mobile (left to right, slight curve upward)
+                const t = index / (total - 1);
+                
+                // Adjust for mobile viewport
+                const viewportWidth = window.innerWidth;
+                const padding = 20;
+                const maxWidth = viewportWidth - (padding * 2);
+                
+                const startX = padding + 60, startY = 100;
+                const controlX = maxWidth / 2, controlY = 50;
+                const endX = maxWidth - 60, endY = 100;
+                
+                const x = Math.pow(1-t, 2) * startX + 2 * (1-t) * t * controlX + Math.pow(t, 2) * endX;
+                const y = Math.pow(1-t, 2) * startY + 2 * (1-t) * t * controlY + Math.pow(t, 2) * endY;
+                
+                return { x, y };
+            } else {
+                // Vertical path for desktop (bottom to top)
+                const t = index / (total - 1);
+                
+                const startX = 150, startY = 550;
+                const controlX = 50, controlY = 300;
+                const endX = 150, endY = 50;
+                
+                const x = Math.pow(1-t, 2) * startX + 2 * (1-t) * t * controlX + Math.pow(t, 2) * endX;
+                const y = Math.pow(1-t, 2) * startY + 2 * (1-t) * t * controlY + Math.pow(t, 2) * endY;
+                
+                return { x, y };
+            }
+        }
+
+        // Create slides
+        function createSlides() {
+            slidesContainer.innerHTML = '';
+            slides.forEach((slide, index) => {
+                const slideEl = document.createElement('div');
+                slideEl.className = 'slide';
+                slideEl.innerHTML = `
+                    <div class="slide-image-wrapper">
+                        <div class="image-border">
+                            <svg class="progress-ring">
+                                <circle class="progress-ring-circle" cx="50%" cy="50%" r="100"></circle>
+                            </svg>
+                            <img src="${slide.img}" alt="${slide.title}" class="slide-image">
+                        </div>
+                    </div>
+                `;
+                slideEl.onclick = () => goToSlide(index);
+                slidesContainer.appendChild(slideEl);
+            });
+            updateSlides();
+        }
+
+        // Update slide positions and states
+        function updateSlides() {
+            const slideElements = slidesContainer.querySelectorAll('.slide');
+            const total = slides.length;
+            const visibleCount = 3;
+            
+            slideElements.forEach((slideEl, index) => {
+                const offset = (index - currentIndex + total) % total;
+                let displayIndex;
+                
+                if (offset === 0) {
+                    displayIndex = 1; // Center (active)
+                } else if (offset === 1 || offset === total - 1) {
+                    displayIndex = offset === 1 ? 2 : 0;
+                } else {
+                    displayIndex = -1;
+                }
+                
+                if (displayIndex >= 0 && displayIndex < visibleCount) {
+                    const pos = calculatePosition(displayIndex, visibleCount);
+                    const imageWrapper = slideEl.querySelector('.slide-image-wrapper');
+                    const wrapperSize = displayIndex === 1 ? 200 : 120;
+                    
+                    slideEl.style.left = `${pos.x - wrapperSize/2}px`;
+                    slideEl.style.top = `${pos.y - wrapperSize/2}px`;
+                    slideEl.style.display = 'block';
+                    
+                    if (displayIndex === 1) {
+                        slideEl.classList.add('active');
+                    } else {
+                        slideEl.classList.remove('active');
+                    }
+                } else {
+                    slideEl.style.display = 'none';
+                }
+            });
+            
+            updateContent();
+        }
+
+        function updateContent() {
+            const slide = slides[currentIndex];
+            contentSection.classList.remove('active');
+            
+            setTimeout(() => {
+                contentTitle.textContent = slide.title;
+                contentDesc.textContent = slide.desc;
+                contentCta.textContent = slide.cta;
+                contentSection.classList.add('active');
+            }, 300);
+            
+            resetProgress();
+        }
+
+        function resetProgress() {
+            document.querySelectorAll('.progress-ring-circle').forEach(circle => {
+                circle.style.animation = 'none';
+                circle.offsetHeight;
+                circle.style.animation = null;
+            });
+        }
+
+        function goToSlide(index) {
+            currentIndex = index;
+            updateSlides();
+            resetAutoplay();
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateSlides();
+            resetAutoplay();
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateSlides();
+            resetAutoplay();
+        }
+
+        function startAutoplay() {
+            autoplayInterval = setInterval(nextSlide, 3000);
+        }
+
+        function resetAutoplay() {
+            clearInterval(autoplayInterval);
+            startAutoplay();
+        }
+
+        document.getElementById('nextBtn').onclick = nextSlide;
+        document.getElementById('prevBtn').onclick = prevSlide;
+
+        createSlides();
+        contentSection.classList.add('active');
+        startAutoplay();
+
+        // Handle window resize
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                updateSlides();
+            }, 250);
+        });
+    </script>
+</body>
+</html>

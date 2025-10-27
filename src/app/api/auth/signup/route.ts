@@ -32,11 +32,11 @@ export async function POST(request: NextRequest) {
     }
 
     const db = await createConnection('');
-    
+
     // Check if user already exists
     const checkSql = "SELECT id FROM users WHERE email = ?";
     const [existingUsers] = await db.query(checkSql, [email]);
-    
+
     if (existingUsers.length > 0) {
       await db.end();
       return NextResponse.json(
@@ -55,12 +55,21 @@ export async function POST(request: NextRequest) {
       VALUES (?, ?, ?, NOW())
     `;
     const [result] = await db.query(insertSql, [name, email, hashedPassword]);
+    // Create merchant entry for this user
+    const newUserId = result.insertId;
+    const generatedPrivateKey = `fp_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+
+    await db.query(
+      "INSERT INTO merchants (user_id, name, email, private_key) VALUES (?, ?, ?, ?)",
+      [newUserId, name, email, generatedPrivateKey]
+    );
+
 
     // Generate JWT token
     const token = jwt.sign(
-      { 
-        userId: result.insertId, 
-        email: email 
+      {
+        userId: result.insertId,
+        email: email
       },
       process.env.JWT_SECRET || 'your-secret-key',
       { expiresIn: '24h' }
