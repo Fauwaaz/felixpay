@@ -1,7 +1,7 @@
 import mysql from 'mysql2/promise';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const conn = await mysql.createConnection({
       host: process.env.MYSQL_HOST || 'sg1-cl8-ats1.a2hosting.com',

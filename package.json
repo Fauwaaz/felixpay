@@ -63,5 +63,12 @@
       "react": "^16.8.0 || ^17 || ^18 || ^19",
       "react-dom": "^16.8.0 || ^17 || ^18 || ^19"
     }
+  },
+  "eslintConfig": {
+    "extends": "next",
+    "rules": {
+      "react-hooks/exhaustive-deps": "off",
+      "react/no-unescaped-entities": "off"
+    }
   }
 }
